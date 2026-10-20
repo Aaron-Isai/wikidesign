@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>WikiDesign | Experiencia de Usuario – P1</title>
+
+    <!-- Tipografías oficiales -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --purpura: #57568C;
+            --azul-marino: #1A1C40;
+            --azul-oscuro: #0F1926;
+            --verde-olivo: #7D8C46;
+            --gris-claro: #D9D9D9;
+            --azul-medio: #262A47;
+            --purpura-claro: #9286D9;
+        }
+
+        body {
+            margin: 0;
+            background: var(--azul-oscuro);
+            color: var(--gris-claro);
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* HEADER */
+        .nav {
+            background: var(--gris-claro);
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* LOGO */
+        .logo img {
+            height: 110px;
+            width: 340px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* MENÚ */
+        .nav a {
+            margin-left: 20px;
+            color: var(--purpura);
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* ICONOS DERECHA */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icons img {
+            height: 32px;
+            width: 32px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        /* BUSCADOR ANIMADO */
+        #search-container {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.4s ease;
+            background: var(--gris-claro);
+            padding: 0;
+            margin: 10px 20px;
+            border-radius: 6px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            border-radius: 6px;
+            background: white;
+            color: black;
+        }
+
+        .layout {
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px; flex: 0 0 260px; box-sizing: border-box;
+            transition: width .3s ease, flex-basis .3s ease;
+            background: var(--azul-medio);
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            cursor: pointer; user-select: none;
+            margin-top: 0;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--verde-olivo);
+            border-bottom: 1px solid var(--verde-olivo);
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* FLECHAS */
+        .sidebar h2 img {
+            height: 22px;
+            width: 22px;
+            object-fit: contain;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .flecha-abierta {
+            filter: brightness(1.2);
+        }
+
+        .flecha-cerrada {
+            filter: brightness(0.6);
+        }
+
+        /* ANIMACIÓN MENÚ */
+        .sidebar ul {
+            overflow: hidden;
+            max-height: 500px;
+            transition: max-height 0.4s ease;
+        }
+
+        .sidebar ul.is-collapsed { max-height: 0 !important; opacity: 0; margin-top: 0; margin-bottom: 0; }
+        .sidebar.is-collapsed { width: 72px; flex-basis: 72px; padding: 16px 10px; }
+        .sidebar.is-collapsed h2 { font-size: 0; justify-content: center; border: 0; }
+        .sidebar.is-collapsed h2 img { width: 28px; height: 28px; }
+        .sidebar a { color: inherit; }
+        #temas-lista a { text-decoration: none; }
+        .sidebar a:hover { color: white; text-decoration: underline; }
+        .content { min-width: 0; }
+        .content h1, .content h2, .content h3 { scroll-margin-top: 24px; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        #search-container { box-sizing: border-box; }
+        #search-container.is-open { width: min(360px, calc(100% - 40px)); padding: 2px; }
+        #search-status { margin: 0 20px; color: var(--gris-claro); }
+        .search-hidden { display: none !important; }
+        .volver-arriba { display: inline-block; margin: 24px 0; padding: 10px 16px; border-radius: 18px; background: var(--purpura); color: white; text-decoration: none; }
+        @media (max-width: 850px) { .layout { display:block; } .sidebar { width:100%; } .sidebar.is-collapsed { width:100%; } .top-section { flex-direction:column; } .image-column { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); } .content { padding:24px 18px; } }
+        .sidebar li {
+            margin: 8px 0;
+            font-size: 14px;
+            color: var(--verde-olivo);
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px;
+        }
+        body:not(.topic-open) .content > :not(.home-screen) { display: none; }
+        body.topic-open .home-screen { display: none; }
+        .home-screen { min-height: 55vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding: 30px; box-sizing:border-box; }
+        .home-screen .home-kicker { color:var(--purpura-claro); font:600 14px 'Montserrat',sans-serif; letter-spacing:.16em; text-transform:uppercase; }
+        .home-screen h1 { color:var(--verde-olivo); font:700 clamp(30px,4vw,52px) 'Montserrat',sans-serif; margin:12px 0 24px; }
+        .home-screen blockquote { max-width:850px; margin:0; padding:0 24px; border-left:4px solid var(--purpura-claro); color:var(--gris-claro); font-size:clamp(20px,2.6vw,32px); line-height:1.5; }
+        .home-screen cite { display:block; margin-top:20px; color:var(--purpura-claro); font-size:15px; font-style:normal; }
+        .home-screen .intro { max-width:720px; margin:28px 0 22px; line-height:1.75; color:var(--gris-claro); }
+        .home-screen .open-topic { display:inline-block; padding:12px 22px; border-radius:24px; background:var(--purpura); color:#fff; font-weight:600; text-decoration:none; transition:background .2s, transform .2s; }
+        .home-screen .open-topic:hover { background:var(--purpura-claro); transform:translateY(-2px); }
+        #temas-lista a[aria-current="page"] { color:#fff; text-decoration:underline; }
+
+        .content h1 {
+            font-size: 28px;
+            margin-top: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--verde-olivo);
+        }
+
+        .content h2 {
+            margin-top: 40px;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--verde-olivo);
+        }
+
+        .text-box {
+            background: var(--gris-claro);
+            color: var(--azul-oscuro);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .top-section {
+            display: flex;
+            gap: 30px;
+        }
+
+        .text-column {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image-column {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .img-box {
+            width: 100%;
+            height: 180px;
+            background: var(--azul-oscuro);
+            border: 2px solid var(--verde-olivo);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .img-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bottom-images {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .img-box.small {
+            height: 140px;
+        }
+
+        footer {
+            background: var(--azul-marino);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--gris-claro);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ⭐ HEADER -->
+<header class="nav" id="inicio">
+
+    <div class="logo">
+        <img src="IMAGEN/Logos.png" alt="Logo WikiDesign">
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <nav>
+            <a href="#inicio">INICIO</a>
+            <a href="#comentarios">COLABORA</a>
+            <a href="#acerca">ACERCA DE NOSOTROS</a>
+        </nav>
+
+        <div class="header-icons">
+            <button class="search-toggle" type="button" aria-label="Abrir búsqueda" aria-expanded="false" style="border:0;background:transparent;cursor:pointer"><img src="IMAGEN/magnifying-glass-icon.png" alt=""></button>
+        </div>
+    </div>
+
+</header>
+
+<!-- ⭐ BUSCADOR ANIMADO -->
+<div id="search-container">
+    <input type="search" id="search-input" placeholder="Buscar en esta página..." aria-label="Buscar en esta página">
+</div>
+<p id="search-status" aria-live="polite"></p>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <h2 id="temas-titulo" role="button" tabindex="0" aria-controls="temas-lista" aria-expanded="true">
+            TEMAS 
+            <img id="flecha-temas" class="flecha-abierta" src="IMAGEN/Arrow2.png" alt="flecha">
+        </h2>
+
+        <ul id="temas-lista">
+            <li><a href="#experiencia" id="abrir-experiencia">EXPERIENCIA DE USUARIO - P1</a></li><li><a href="#inicio">DISEÑO WEB</a></li><li><a href="#inicio">DESIGN THINKING</a></li><li><a href="#inicio">DISEÑO CENTRADO EN EL USUARIO</a></li><li><a href="#inicio">DISEÑO DE INTERACCIÓN</a></li><li><a href="#inicio">ARQUITECTURA DE LA INFORMACIÓN</a></li><li><a href="#inicio">DISEÑO DE NAVEGACIÓN</a></li><li><a href="#inicio">DISEÑO VISUAL</a></li>
+        </ul>
+
+        <h2 id="sumario-titulo" role="button" tabindex="0" aria-controls="sumario-lista" aria-expanded="true">
+            SUMARIO 
+            <img id="flecha-sumario" class="flecha-abierta" src="IMAGEN/Arrow2.png" alt="flecha">
+        </h2>
+
+        <ul id="sumario-lista">
+            <li><a href="#que-es-ux">¿Qué es la UX?</a></li><li><a href="#importancia-ux">Importancia de la UX</a></li><li><a href="#beneficios">Beneficios</a></li><li><a href="#objetivos">Objetivos</a></li><li><a href="#comentarios">Cómo recopilar comentarios</a></li>
+        </ul>
+
+    </aside>
+
+    <main class="content">
+        <section class="home-screen" id="pantalla-inicio">
+            <p class="home-kicker">Diseño centrado en las personas</p>
+            <h1>WikiDesign</h1>
+            <blockquote>
+                “El diseño es, en realidad, un acto de comunicación: requiere comprender profundamente a la persona con quien el diseñador se comunica.”
+                <cite>— Don Norman, <em>El diseño de las cosas cotidianas</em> (traducción al español)</cite>
+            </blockquote>
+            <p class="intro">WikiDesign es un espacio educativo para explorar la experiencia de usuario, el diseño web y cómo crear productos digitales útiles, claros y fáciles de usar.</p>
+            <a class="open-topic" href="#experiencia" id="abrir-tema-portada">Explorar experiencia de usuario</a>
+        </section>
+        <h1 id="experiencia">EXPERIENCIA DE USUARIO - P1</h1>
+
+        <div class="top-section">
+
+            <div class="text-column">
+
+                <!-- TODO TU CONTENIDO INTACTO -->
+                <div class="text-box">
+                    <h3 id="que-es-ux">¿Qué es la experiencia de usuario (UX)?</h3>
+                    <p>La experiencia de usuario (UX, por sus siglas en inglés User Experience) es la percepción y las sensaciones que tiene una persona al interactuar con un producto, sistema o servicio. Abarca todos los aspectos de esa interacción, desde la facilidad de uso y la accesibilidad hasta el diseño visual, las funciones de la interfaz y las emociones que genera.</p>
+                    <p>La UX busca comprender las necesidades, expectativas y dificultades de los usuarios para diseñar productos y servicios que sean útiles, intuitivos y agradables. Para lograrlo, combina conocimientos de distintas disciplinas, como el diseño, la psicología, la ingeniería y los negocios. Además, se apoya en herramientas como encuestas, entrevistas y pruebas de usabilidad, que permiten conocer la opinión de los usuarios e identificar oportunidades de mejora.</p>
+                    <p>Uno de los principales referentes de este campo es Don Norman, quien popularizó el término «experiencia de usuario» durante su trabajo en Apple en la década de 1990. Norman es considerado una figura fundamental en el desarrollo de la UX y, posteriormente, cofundó Nielsen Norman Group, una empresa dedicada a la investigación y consultoría en experiencia de usuario.</p>
+                    <p>El diseño de UX se desarrolla mediante distintas etapas que permiten conocer al usuario, planificar la estructura del producto y evaluar su funcionamiento. Entre las principales se encuentran:</p>
+                    <ul>
+                        <li><strong>Investigación:</strong> consiste en conocer a los usuarios, sus necesidades, sus expectativas y los problemas que buscan resolver.</li>
+                        <li><strong>Arquitectura de la información:</strong> organiza los contenidos y las funciones para que las personas puedan encontrar fácilmente lo que necesitan.</li>
+                        <li><strong>Creación de wireframes:</strong> esquemas básicos de las pantallas para definir la distribución de los elementos.</li>
+                        <li><strong>Creación de prototipos:</strong> representa cómo funcionará el producto antes de desarrollarlo por completo.</li>
+                        <li><strong>Pruebas con usuarios:</strong> ayudan a identificar dificultades y evaluar la facilidad de uso.</li>
+                    </ul>
+                </div>
+
+                <div class="text-box">
+                    <h3 id="importancia-ux">¿Por qué es importante la UX?</h3>
+                    <p>La experiencia de usuario es un factor importante para el éxito de una empresa, ya que influye en la satisfacción de los clientes, su confianza y su relación con la marca. En un mercado donde existen numerosas opciones, las personas esperan que los productos y servicios sean fáciles de utilizar, respondan a sus necesidades y les permitan completar sus tareas sin complicaciones.</p>
+                    <p>Una buena experiencia de usuario puede mejorar la percepción que los clientes tienen de una empresa, favorecer que regresen y aumentar las posibilidades de que recomienden sus productos o servicios. Por el contrario, una experiencia confusa, lenta o difícil de utilizar puede provocar frustración, abandono y una opinión negativa de la marca.</p>
+                    <p>En los productos y servicios digitales, como los sitios web y las aplicaciones móviles, la UX es especialmente relevante porque influye en la manera en que las personas navegan, encuentran información y realizan acciones. Por ello, el diseño de la experiencia de usuario no se limita a la apariencia visual, sino que también busca garantizar que el producto sea funcional, accesible y fácil de comprender.</p>
+                </div>
+
+            </div>
+
+            <div class="image-column">
+                <div class="img-box">
+                    <video controls preload="none" playsinline>
+                        <source src="IMAGEN/video-diseno-usuario.mp4.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <div class="img-box">
+                    <video controls preload="none" playsinline>
+                        <source src="IMAGEN/video-explicacion-rapida.mp4.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <div class="img-box">
+                    <video controls preload="none" playsinline>
+                        <source src="IMAGEN/video-interfaces.mp4.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 id="beneficios">Beneficios de una buena experiencia de usuario</h2>
+        <div class="text-box">
+            <p>Invertir en UX puede generar beneficios tanto para los usuarios como para las empresas. Cuando un producto o servicio está diseñado de acuerdo con las necesidades de las personas, resulta más sencillo de utilizar y contribuye a construir una relación positiva con los clientes.</p>
+            <p>Entre sus principales beneficios se encuentran:</p>
+            <ul>
+                <li>Mayor satisfacción del cliente.</li>
+                <li>Mejor usabilidad.</li>
+                <li>Mayor retención de clientes.</li>
+                <li>Incremento de las conversiones.</li>
+                <li>Reducción del abandono.</li>
+                <li>Ventaja competitiva.</li>
+            </ul>
+        </div>
+
+        <h2 id="objetivos">Objetivos de la experiencia de usuario (UX)</h2>
+        <div class="text-box">
+            <p>El diseño de UX busca mejorar la interacción entre las personas y los productos o servicios. Para ello, establece objetivos que pueden medirse y evaluarse a lo largo del tiempo.</p>
+            <ul>
+                <li>Aumentar las tasas de conversión en sitios web y aplicaciones.</li>
+                <li>Facilitar la navegación y mejorar la usabilidad.</li>
+                <li>Incrementar la satisfacción de los clientes.</li>
+                <li>Reducir el abandono durante el proceso de compra o registro.</li>
+                <li>Mejorar la accesibilidad.</li>
+                <li>Identificar y resolver los problemas que dificultan la experiencia del usuario.</li>
+            </ul>
+        </div>
+
+        <h2 id="comentarios">¿Cómo recopilar comentarios de los usuarios?</h2>
+        <div class="text-box">
+            <p>Para mejorar la experiencia de usuario, es necesario conocer la opinión de las personas que utilizan el producto o servicio. Recopilar sus comentarios permite identificar problemas, comprender sus expectativas y tomar decisiones basadas en información real.</p>
+            <p>Existen diferentes métodos para obtener esta información, como encuestas, entrevistas, pruebas de usabilidad, formularios de comentarios y análisis del comportamiento de los usuarios.</p>
+            <p>Entre los aspectos más importantes que se deben evaluar se encuentran:</p>
+            <ul>
+                <li><strong>Satisfacción del usuario:</strong> indicadores como CSAT y NPS.</li>
+                <li><strong>Puntos de dificultad:</strong> obstáculos que generan frustración.</li>
+                <li><strong>Usabilidad:</strong> facilidad para completar tareas.</li>
+                <li><strong>Comentarios y sugerencias:</strong> opiniones abiertas de los usuarios.</li>
+                <li><strong>Comportamiento:</strong> tasas de abandono, errores frecuentes, tiempo para completar tareas.</li>
+            </ul>
+            <p>Recopilar esta información es solo el primer paso. También es necesario analizar los resultados, priorizar los problemas más importantes y realizar cambios que respondan a las necesidades detectadas. Después, se deben evaluar nuevamente los resultados para comprobar si las mejoras realmente contribuyen a una experiencia más satisfactoria.</p>
+        </div>
+
+        <div class="bottom-images">
+            <a class="img-box small" href="IMAGEN/diseno-centrado-en-el-usuario.png" target="_blank" rel="noopener"><img src="IMAGEN/diseno-centrado-en-el-usuario.png" alt="Diseño centrado en el usuario" loading="lazy"></a>
+            <a class="img-box small" href="IMAGEN/UX%20622216766.jpg" target="_blank" rel="noopener"><img src="IMAGEN/UX 622216766.jpg" alt="Ilustración sobre experiencia de usuario" loading="lazy"></a>
+        </div>
+        <a class="volver-arriba" href="#inicio">↑ Volver al inicio</a>
+
+    </main>
+
+</div>
+
+<footer id="acerca">
+    <p>© 2026 Wiki Design. Todos los derechos reservados.</p>
+    <p>El contenido de este sitio ha sido desarrollado con fines educativos y académicos.</p>
+</footer>
+
+<script>
+(() => {
+  function accordion(titleId, listId, arrowId) {
+    const title=document.getElementById(titleId), list=document.getElementById(listId), arrow=document.getElementById(arrowId);
+    const toggle=()=>{const open=title.getAttribute('aria-expanded')==='true'; title.setAttribute('aria-expanded',String(!open)); list.classList.toggle('is-collapsed',open); if(arrow) arrow.style.transform=open?'rotate(-90deg)':'rotate(0deg)';};
+    title.addEventListener('click',toggle); title.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
+  }
+  const topicLink=document.getElementById('abrir-experiencia');
+  document.getElementById('abrir-tema-portada').addEventListener('click',event=>{event.preventDefault();topicLink.click();});
+  topicLink.addEventListener('click',event=>{
+    event.preventDefault();
+    document.body.classList.add('topic-open');
+    topicLink.setAttribute('aria-current','page');
+    history.replaceState(null,'','#experiencia');
+    document.getElementById('experiencia').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  document.querySelector('.nav a[href="#inicio"]').addEventListener('click',event=>{
+    event.preventDefault();
+    document.body.classList.remove('topic-open');
+    topicLink.removeAttribute('aria-current');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  accordion('temas-titulo','temas-lista','flecha-temas');
+  accordion('sumario-titulo','sumario-lista','flecha-sumario');
+  const button=document.querySelector('.search-toggle'), box=document.getElementById('search-container'), input=document.getElementById('search-input'), status=document.getElementById('search-status');
+  const targets=[...document.querySelectorAll('.text-box,.content h2,.content h3')];
+  function search(){const q=input.value.trim().toLocaleLowerCase('es'); let n=0; targets.forEach(el=>{const ok=!q||el.textContent.toLocaleLowerCase('es').includes(q); el.classList.toggle('search-hidden',!ok); if(ok&&q)n++;}); status.textContent=q?(n?`Coincidencias encontradas: ${n}`:'No se encontraron coincidencias.'):'';}
+  button.addEventListener('click',()=>{const open=box.classList.toggle('is-open'); button.setAttribute('aria-expanded',String(open)); if(open)input.focus(); else {input.value='';search();}});
+  input.addEventListener('input',search); input.addEventListener('keydown',e=>{if(e.key==='Escape'){input.value='';search();box.classList.remove('is-open');button.setAttribute('aria-expanded','false');}});
+})();
+</script>
+
+</body>
+</html>
