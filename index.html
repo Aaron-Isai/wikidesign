@@ -51,11 +51,17 @@
             font-family: 'Montserrat', sans-serif;
         }
 
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
         /* ICONOS DERECHA */
         .header-icons {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
         }
 
         .header-icons img {
@@ -72,7 +78,7 @@
             transition: width 0.4s ease;
             background: var(--gris-claro);
             padding: 0;
-            margin: 10px 20px;
+            margin: 0;
             border-radius: 6px;
         }
 
@@ -146,11 +152,11 @@
         .content h1, .content h2, .content h3 { scroll-margin-top: 24px; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
         #search-container { box-sizing: border-box; }
-        #search-container.is-open { width: min(360px, calc(100% - 40px)); padding: 2px; }
-        #search-status { margin: 0 20px; color: var(--gris-claro); }
+        #search-container.is-open { width: min(280px, calc(100vw - 40px)); padding: 2px; }
+        #search-status { margin: 0; color: var(--azul-oscuro); font-size: 12px; }
         .search-hidden { display: none !important; }
         .volver-arriba { display: inline-block; margin: 24px 0; padding: 10px 16px; border-radius: 18px; background: var(--purpura); color: white; text-decoration: none; }
-        @media (max-width: 850px) { .layout { display:block; } .sidebar { width:100%; } .sidebar.is-collapsed { width:100%; } .top-section { flex-direction:column; } .image-column { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); } .content { padding:24px 18px; } }
+        @media (max-width: 850px) { .layout { display:block; } .sidebar { width:100%; } .sidebar.is-collapsed { width:100%; } .top-section { flex-direction:column; } .image-column { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); } .content { padding:24px 18px; } .nav-actions { gap: 10px; } .nav a { margin-left: 8px; font-size: 12px; } }
         .sidebar li {
             margin: 8px 0;
             font-size: 14px;
@@ -260,7 +266,7 @@
         <img src="IMAGEN/Logos.png" alt="Logo WikiDesign">
     </div>
 
-    <div style="display: flex; align-items: center; gap: 20px;">
+    <div class="nav-actions">
         <nav>
             <a href="#inicio">INICIO</a>
             <a href="#comentarios">COLABORA</a>
@@ -269,16 +275,14 @@
 
         <div class="header-icons">
             <button class="search-toggle" type="button" aria-label="Abrir búsqueda" aria-expanded="false" style="border:0;background:transparent;cursor:pointer"><img src="IMAGEN/magnifying-glass-icon.png" alt=""></button>
+            <div id="search-container">
+                <input type="search" id="search-input" placeholder="Buscar en esta página..." aria-label="Buscar en esta página">
+            </div>
+            <p id="search-status" aria-live="polite"></p>
         </div>
     </div>
 
 </header>
-
-<!-- ⭐ BUSCADOR ANIMADO -->
-<div id="search-container">
-    <input type="search" id="search-input" placeholder="Buscar en esta página..." aria-label="Buscar en esta página">
-</div>
-<p id="search-status" aria-live="polite"></p>
 
 <div class="layout">
 
@@ -349,19 +353,19 @@
             <div class="image-column">
                 <div class="img-box">
                     <video controls preload="none" playsinline>
-                        <source src="IMAGEN/video-diseno-usuario.mp4.mp4" type="video/mp4">
+                        <source src="IMAGEN/video-diseno-usuario.mp4" type="video/mp4">
                     </video>
                 </div>
 
                 <div class="img-box">
                     <video controls preload="none" playsinline>
-                        <source src="IMAGEN/video-explicacion-rapida.mp4.mp4" type="video/mp4">
+                        <source src="IMAGEN/video-explicacion-rapida.mp4" type="video/mp4">
                     </video>
                 </div>
 
                 <div class="img-box">
                     <video controls preload="none" playsinline>
-                        <source src="IMAGEN/video-interfaces.mp4.mp4" type="video/mp4">
+                        <source src="IMAGEN/video-interfaces.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
@@ -412,7 +416,7 @@
 
         <div class="bottom-images">
             <a class="img-box small" href="IMAGEN/diseno-centrado-en-el-usuario.png" target="_blank" rel="noopener"><img src="IMAGEN/diseno-centrado-en-el-usuario.png" alt="Diseño centrado en el usuario" loading="lazy"></a>
-            <a class="img-box small" href="IMAGEN/UX%20622216766.jpg" target="_blank" rel="noopener"><img src="IMAGEN/UX 622216766.jpg" alt="Ilustración sobre experiencia de usuario" loading="lazy"></a>
+            <a class="img-box small" href="IMAGEN/UX%20622216766.jpg" target="_blank" rel="noopener"><img src="IMAGEN/UX%20622216766.jpg" alt="Ilustración sobre experiencia de usuario" loading="lazy"></a>
         </div>
         <a class="volver-arriba" href="#inicio">↑ Volver al inicio</a>
 
@@ -459,3 +463,4 @@
 
 </body>
 </html>
+
